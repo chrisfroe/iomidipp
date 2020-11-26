@@ -10,79 +10,20 @@
 
 namespace imp {
 
-// TODO remove this, can be vector<MidiEvent>. Move link and sort funtionality to utils.
-class MidiEventList {
-public:
-    MidiEventList(void);
+using MidiEventList = std::vector<MidiEvent>;
 
-    MidiEventList(const MidiEventList &other);
+void removeEmpties(MidiEventList &list);
 
-    MidiEventList(MidiEventList &&other);
+int linkNotePairs(MidiEventList &list);
 
-    MidiEventList &operator=(MidiEventList &other);
+void clearLinks(MidiEventList &list);
 
-    MidiEvent &operator[](int index);
+void clearSequence(MidiEventList &list);
 
-    const MidiEvent &operator[](int index) const;
+int markSequence(MidiEventList &list, int sequence = 1);
 
-    MidiEvent &back(void);
+void sort(MidiEventList& list);
 
-    const MidiEvent &back(void) const;
-
-    MidiEvent &last(void);
-
-    const MidiEvent &last(void) const;
-
-    MidiEvent &getEvent(int index);
-
-    const MidiEvent &getEvent(int index) const;
-
-    void clear(void);
-
-    void reserve(int rsize);
-
-    int getEventCount(void) const;
-
-    int getSize(void) const;
-
-    int size(void) const;
-
-    void removeEmpties(void);
-
-    int linkNotePairs(void);
-
-    int linkEventPairs(void);
-
-    void clearLinks(void);
-
-    void clearSequence(void);
-
-    int markSequence(int sequence = 1);
-
-    int push(MidiEvent &event);
-
-    int push_back(MidiEvent &event);
-
-    int append(MidiEvent &event);
-
-    // careful when using these, intended for internal use in MidiFile class:
-    void detach(void);
-
-    int push_back_no_copy(MidiEvent *event);
-
-    // access to the list of MidiEvents for sorting with an external function:
-    MidiEvent **data(void);
-
-protected:
-    std::vector<MidiEvent> list;
-
-private:
-    void sort(void);
-
-    // MidiFile class calls sort()
-    friend class MidiFile;
-};
-
-int eventcompare(const void *a, const void *b);
+int eventcompare(MidiEvent const &a, MidiEvent const &b);
 
 }

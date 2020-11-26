@@ -5,12 +5,7 @@
 
 #include <iomidipp/MidiEvent.h>
 
-#include <cstdlib>
-
 namespace imp {
-
-MidiEvent::MidiEvent(void)
-        : MidiMessage() {}
 
 MidiEvent::MidiEvent(int command)
         : MidiMessage(command) {}
@@ -21,7 +16,7 @@ MidiEvent::MidiEvent(int command, int p1)
 MidiEvent::MidiEvent(int command, int p1, int p2)
         : MidiMessage(command, p1, p2) {}
 
-MidiEvent::MidiEvent(int aTime, int aTrack, vector <uchar> &message)
+MidiEvent::MidiEvent(int aTime, int aTrack, std::vector<uchar> &message)
         : MidiMessage(message), track(aTrack), tick(aTime) {}
 
 // MidiEvent::unlinkEvent -- Disassociate this event with another.
@@ -38,12 +33,12 @@ void MidiEvent::unlinkEvent() {
 // MidiEvent::linkEvent -- Make a link between two messages.
 //   Unlinking
 void MidiEvent::linkEvent(MidiEvent *mev) {
-    if (mev->linkedEvent != NULL) {
+    if (mev->linkedEvent != nullptr) {
         // unlink other event if it is linked to something else;
         mev->unlinkEvent();
     }
     // if this is already linked to something else, then unlink:
-    if (linkedEvent != NULL) {
+    if (linkedEvent != nullptr) {
         linkedEvent->unlinkEvent();
     }
     unlinkEvent();
@@ -59,28 +54,24 @@ void MidiEvent::linkEvent(MidiEvent &mev) {
 // MidiEvent::getLinkedEvent -- Returns a linked event.  Usually
 //   this is the note-off message for a note-on message and vice-versa.
 //   Returns null if there are no links.
-MidiEvent *MidiEvent::getLinkedEvent(void) {
-    return linkedEvent;
-}
-
-const MidiEvent *MidiEvent::getLinkedEvent(void) const {
+MidiEvent *MidiEvent::getLinkedEvent() {
     return linkedEvent;
 }
 
 // MidiEvent::isLinked -- Returns true if there is an event which is not
-//   NULL.  This function is similar to getLinkedEvent().
+//   nullptr.  This function is similar to getLinkedEvent().
 
-int MidiEvent::isLinked(void) const {
-    return linkedEvent == NULL ? 0 : 1;
+bool MidiEvent::isLinked() const {
+    return linkedEvent == nullptr;
 }
 
 // MidiEvent::getTickDuration --  For linked events (note-ons and note-offs),
 //    return the absolute tick time difference between the two events.
 //    The tick values are presumed to be in absolute tick mode rather than
 //    delta tick mode.  Returns 0 if not linked.
-int MidiEvent::getTickDuration(void) const {
-    const MidiEvent *mev = getLinkedEvent();
-    if (mev == NULL) {
+int MidiEvent::getTickDuration() {
+    MidiEvent *mev = getLinkedEvent();
+    if (mev == nullptr) {
         return 0;
     }
     int tick2 = mev->tick;
@@ -95,9 +86,9 @@ int MidiEvent::getTickDuration(void) const {
 //     note-offs), return the duration of the note in seconds.  The
 //     seconds analysis must be done first; otherwise the duration will be
 //     reported as zero.
-double MidiEvent::getDurationInSeconds(void) const {
-    const MidiEvent *mev = getLinkedEvent();
-    if (mev == NULL) {
+double MidiEvent::getDurationInSeconds() {
+    MidiEvent *mev = getLinkedEvent();
+    if (mev == nullptr) {
         return 0;
     }
     double seconds2 = mev->seconds;

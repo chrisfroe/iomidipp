@@ -3,11 +3,8 @@
  * @copyright 2020-2020, Christoph Fröhner under BSD-2 license
  */
 
-#include <iterator>
-#include <utility>
-#include <vector>
-
 #include <iomidipp/MidiMessage.h>
+#include <iterator>
 
 namespace imp {
 
@@ -80,8 +77,6 @@ int MidiMessage::resizeToCommand() {
 // MidiMessage::getTempoMicro -- Returns the number of microseconds per
 //      quarter note if the MidiMessage is a tempo meta message.
 //      Returns -1 if the MIDI message is not a tempo meta message.
-//
-
 int MidiMessage::getTempoMicro() const {
     if (!isTempo()) {
         return -1;
@@ -155,7 +150,7 @@ bool MidiMessage::isMeta() const {
     }
 }
 
-bool MidiMessage::isMetaMessage(void) const {
+bool MidiMessage::isMetaMessage() const {
     return isMeta();
 }
 
@@ -445,7 +440,7 @@ bool MidiMessage::isTempo() const {
 // MidiMessage::isTimeSignature -- Returns true if message is
 //      a meta message describing a time signature (meta message
 //      type 0x58).
-bool MidiMessage::isTimeSignature(void) const {
+bool MidiMessage::isTimeSignature() const {
     if (!isMetaMessage()) {
         return false;
     } else if (content[1] != 0x58) {
@@ -462,7 +457,7 @@ bool MidiMessage::isTimeSignature(void) const {
 // MidiMessage::isKeySignature -- Returns true if message is
 //      a meta message describing a key signature (meta message
 //      type 0x59).
-bool MidiMessage::isKeySignature(void) const {
+bool MidiMessage::isKeySignature() const {
     if (!isMetaMessage()) {
         return false;
     } else if (content[1] != 0x59) {
@@ -478,17 +473,17 @@ bool MidiMessage::isKeySignature(void) const {
 
 // MidiMessage::isEndOfTrack -- Returns true if message is a meta message
 //      for end-of-track (meta message type 0x2f).
-bool MidiMessage::isEndOfTrack(void) const {
+bool MidiMessage::isEndOfTrack() const {
     return getMetaType() == 0x2f ? 1 : 0;
 }
 
 // MidiMessage::getP0 -- Return index 1 byte, or -1 if it doesn't exist.
-int MidiMessage::getP0(void) const {
+int MidiMessage::getP0() const {
     return getSize() < 1 ? -1 : content[0];
 }
 
 // MidiMessage::getP1 -- Return index 1 byte, or -1 if it doesn't exist.
-int MidiMessage::getP1(void) const {
+int MidiMessage::getP1() const {
     return getSize() < 2 ? -1 : content[1];
 }
 
@@ -506,7 +501,7 @@ int MidiMessage::getP3() const {
 //    middle C).  If the message does not have a note parameter, then
 //    return -1;  if the key is invalid (above 127 in value), then
 //    limit to the range 0 to 127.
-int MidiMessage::getKeyNumber(void) const {
+int MidiMessage::getKeyNumber() const {
     if (isNote() || isAftertouch()) {
         int output = getP1();
         if (output < 0) {
@@ -762,7 +757,6 @@ void MidiMessage::setContent(Content const& otherContent) {
 //    MIDI note 60 is ambiguous as to which of these names are intended,
 //    so MIDIPlus allows these mappings to be preserved for later recovery.
 //    See Chapter 5 (pp. 99-104) of Beyond MIDI (1997).
-//
 //    The first parameter is the diatonic pitch number (or pitch class
 //    if the octave is set to 0):
 //       octave * 7 + 0 = C pitches
@@ -772,15 +766,11 @@ void MidiMessage::setContent(Content const& otherContent) {
 //       octave * 7 + 4 = G pitches
 //       octave * 7 + 5 = A pitches
 //       octave * 7 + 6 = B pitches
-//
 //    The second parameter is the semitone alteration (accidental).
 //    0 = natural state, 1 = sharp, 2 = double sharp, -1 = flat,
 //    -2 = double flat.
-//
 //    Only note-on messages can be processed (other messages will be
 //    silently ignored).
-//
-
 void MidiMessage::setSpelling(int base7, int accidental) {
     if (!isNoteOn()) {
         return;
@@ -949,21 +939,17 @@ void MidiMessage::setSpelling(int base7, int accidental) {
     setVelocity(vel);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::getSpelling -- Return the diatonic pitch class and accidental
 //    for a note-on's key number.  The MIDI file must be encoded with MIDIPlus
 //    pitch spelling codes for this function to return valid data; otherwise,
 //    it will return a neutral fixed spelling for each MIDI key.
-//
 //    The first parameter will be filled in with the base-7 diatonic pitch:
 //        pc + octave * 7
 //     where pc is the numbers 0 through 6 representing the pitch classes
 //     C through B, the octave is MIDI octave (not the scientific pitch
 //     octave which is one less than the MIDI ocatave, such as C4 = middle C).
 //     The second number is the accidental for the base-7 pitch.
-//
-
 void MidiMessage::getSpelling(int& base7, int& accidental) {
     if (!isNoteOn()) {
         return;
@@ -1203,25 +1189,22 @@ void MidiMessage::getSpelling(int& base7, int& accidental) {
     base7 = base7pc + 7 * octave;
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::getMetaContent -- Returns the bytes of the meta
 //   message after the length (which is a variable-length-value).
-//
-
-std::string MidiMessage::getMetaContent(void) {
+std::string MidiMessage::getMetaContent() {
     std::string output;
     if (!isMetaMessage()) {
         return output;
     }
     int start = 3;
-    if (operator[](2) > 0x7f) {
+    if (content.at(2) > 0x7f) {
         start++;
-        if (operator[](3) > 0x7f) {
+        if (content.at(3) > 0x7f) {
             start++;
-            if (operator[](4) > 0x7f) {
+            if (content.at(4) > 0x7f) {
                 start++;
-                if (operator[](5) > 0x7f) {
+                if (content.at(5) > 0x7f) {
                     start++;
                     // maximum of 5 bytes in VLV, so last must be < 0x80
                 }
@@ -1230,7 +1213,7 @@ std::string MidiMessage::getMetaContent(void) {
     }
     output.reserve(content.size());
     for (int i = start; i < (int) content.size(); i++) {
-        output.push_back(operator[](i));
+        output.push_back(content.at(i));
     }
     return output;
 }
@@ -1293,34 +1276,25 @@ void MidiMessage::setMetaContent(std::vector<uchar> const& metaContent) {
     std::copy(metaContent.begin(), metaContent.end(), std::back_inserter(content));
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::setMetaTempo -- Input tempo is in quarter notes per minute
 //   (meta message #0x51).
-//
-
 void MidiMessage::setMetaTempo(double tempo) {
     int microseconds = (int) (60.0 / tempo * 1000000.0 + 0.5);
     setTempoMicroseconds(microseconds);
 }
 
-//////////////////////////////
-//
-// MidiMessage::setTempo -- Alias for MidiMessage::setMetaTempo().
-//
 
+// MidiMessage::setTempo -- Alias for MidiMessage::setMetaTempo().
 void MidiMessage::setTempo(double tempo) {
     setMetaTempo(tempo);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::setTempoMicroseconds -- Set the tempo in terms
 //   of microseconds per quarter note.
-//
-
 void MidiMessage::setTempoMicroseconds(int microseconds) {
-    resize(6);
+    content.resize(6);
     content[0] = 0xff;
     content[1] = 0x51;
     content[2] = 3;
@@ -1329,35 +1303,29 @@ void MidiMessage::setTempoMicroseconds(int microseconds) {
     content[5] = (microseconds >> 0) & 0xff;
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeTimeSignature -- create a time signature meta message
 //      (meta #0x58).  The "bottom" parameter should be a power of two;
 //      otherwise, it will be forced to be the next highest power of two,
 //      as MIDI time signatures must have a power of two in the denominator.
-//
 // Default values:
 //     clocksPerClick     == 24 (quarter note)
 //     num32ndsPerQuarter ==  8 (8 32nds per quarter note)
-//
 // Time signature of 4/4 would be:
 //    top    = 4
 //    bottom = 4 (converted to 2 in the MIDI file for 2nd power of 2).
 //    clocksPerClick = 24 (2 eighth notes based on num32ndsPerQuarter)
 //    num32ndsPerQuarter = 8
-//
 // Time signature of 6/8 would be:
 //    top    = 6
 //    bottom = 8 (converted to 3 in the MIDI file for 3rd power of 2).
 //    clocksPerClick = 36 (3 eighth notes based on num32ndsPerQuarter)
 //    num32ndsPerQuarter = 8
-//
-
 void MidiMessage::makeTimeSignature(int top, int bottom, int clocksPerClick,
                                     int num32ndsPerQuarter) {
     int base2 = 0;
     while (bottom >>= 1) base2++;
-    resize(7);
+    content.resize(7);
     content[0] = 0xff;
     content[1] = 0x58;
     content[2] = 4;
@@ -1368,15 +1336,11 @@ void MidiMessage::makeTimeSignature(int top, int bottom, int clocksPerClick,
 }
 
 // MidiMessage::makeNoteOn -- create a note-on message.
-//
 // default value: channel = 0
-//
 // Note: The channel parameter used to be last, but makes more sense to
 //   have it first...
-//
-
 void MidiMessage::makeNoteOn(int channel, int key, int velocity) {
-    resize(3);
+    content.resize(3);
     content[0] = 0x90 | (0x0f & channel);
     content[1] = key & 0x7f;
     content[2] = velocity & 0x7f;
@@ -1385,30 +1349,28 @@ void MidiMessage::makeNoteOn(int channel, int key, int velocity) {
 // MidiMessage::makeNoteOff -- create a note-off message.   If no
 //   parameters are given, the current contents is presumed to be a
 //   note-on message, which will be converted into a note-off message.
-//
 // default value: channel = 0
-//
 // Note: The channel parameter used to be last, but makes more sense to
 //   have it first...
 void MidiMessage::makeNoteOff(int channel, int key, int velocity) {
-    resize(3);
+    content.resize(3);
     content[0] = 0x80 | (0x0f & channel);
     content[1] = key & 0x7f;
     content[2] = velocity & 0x7f;
 }
 
 void MidiMessage::makeNoteOff(int channel, int key) {
-    resize(3);
+    content.resize(3);
     content[0] = 0x90 | (0x0f & channel);
     content[1] = key & 0x7f;
     content[2] = 0x00;
 }
 
-// MidiMessage::makeNoteOff(void) -- create a 0x90 note message with
+// MidiMessage::makeNoteOff() -- create a 0x90 note message with
 //      The key and velocity set to 0.
-void MidiMessage::makeNoteOff(void) {
+void MidiMessage::makeNoteOff() {
     if (!isNoteOn()) {
-        resize(3);
+        content.resize(3);
         content[0] = 0x90;
         content[1] = 0;
         content[2] = 0;
@@ -1419,9 +1381,9 @@ void MidiMessage::makeNoteOff(void) {
 
 // MidiMessage::makePatchChange -- Create a patch-change message.
 void MidiMessage::makePatchChange(int channel, int patchnum) {
-    resize(0);
-    push_back(0xc0 | (0x0f & channel));
-    push_back(0x7f & patchnum);
+    content.resize(0);
+    content.push_back(0xc0 | (0x0f & channel));
+    content.push_back(0x7f & patchnum);
 }
 
 // MidiMessage::makeTimbre -- alias for MidiMessage::makePatchChange().
@@ -1431,155 +1393,110 @@ void MidiMessage::makeTimbre(int channel, int patchnum) {
 
 // MidiMessage::makeController -- Create a controller message.
 void MidiMessage::makeController(int channel, int num, int value) {
-    resize(0);
-    push_back(0xb0 | (0x0f & channel));
-    push_back(0x7f & num);
-    push_back(0x7f & value);
+    content.resize(0);
+    content.push_back(0xb0 | (0x0f & channel));
+    content.push_back(0x7f & num);
+    content.push_back(0x7f & value);
 }
 
-/////////////////////////////
-//
 // MidiMessage::makeSustain -- Create a sustain pedal message.
 //   Value in 0-63 range is a sustain off.  Value in the
 //   64-127 value is a sustain on.
-//
-
 void MidiMessage::makeSustain(int channel, int value) {
     makeController(channel, 64, value);
 }
 
-//
 // MidiMessage::makeSustain -- Alias for MidiMessage::makeSustain().
-//
-
 void MidiMessage::makeSustainPedal(int channel, int value) {
     makeSustain(channel, value);
 }
 
-/////////////////////////////
-//
 // MidiMessage::makeSustainOn -- Create sustain-on controller message.
-//
-
 void MidiMessage::makeSustainOn(int channel) {
     makeController(channel, 64, 127);
 }
 
-//
-// MidiMessage::makeSustainPedalOn -- Alias for MidiMessage::makeSustainOn().
-//
 
+// MidiMessage::makeSustainPedalOn -- Alias for MidiMessage::makeSustainOn().
 void MidiMessage::makeSustainPedalOn(int channel) {
     makeSustainOn(channel);
 }
 
-/////////////////////////////
-//
 // MidiMessage::makeSustainOff -- Create a sustain-off controller message.
-//
-
 void MidiMessage::makeSustainOff(int channel) {
     makeController(channel, 64, 0);
 }
 
-//
 // MidiMessage::makeSustainPedalOff -- Alias for MidiMessage::makeSustainOff().
-//
-
 void MidiMessage::makeSustainPedalOff(int channel) {
     makeSustainOff(channel);
 }
 
-//////////////////////////////
-//
 // MidiMessage::makeMetaMessage -- Create a Meta event with the
 //   given text string as the parameter.  The length of the string should
 //   is a VLV.  If the length is larger than 127 byte, then the length
 //   will contain more than one byte.
-//
-
-void MidiMessage::makeMetaMessage(int mnum, const std::string& data) {
-    resize(0);
-    push_back(0xff);
-    push_back(mnum & 0x7f);// max meta-message number is 0x7f.
+void MidiMessage::makeMetaMessage(int mnum, const Content& data) {
+    content.resize(0);
+    content.push_back(0xff);
+    content.push_back(mnum & 0x7f);// max meta-message number is 0x7f.
     setMetaContent(data);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeText -- Create a metaevent text message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeText(const std::string& text) {
+void MidiMessage::makeText(const Content& text) {
     makeMetaMessage(0x01, text);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeCopyright -- Create a metaevent copyright message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeCopyright(const std::string& text) {
+void MidiMessage::makeCopyright(const Content& text) {
     makeMetaMessage(0x02, text);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeTrackName -- Create a metaevent track name message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeTrackName(const std::string& name) {
+void MidiMessage::makeTrackName(const Content& name) {
     makeMetaMessage(0x03, name);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeTrackName -- Create a metaevent instrument name message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeInstrumentName(const std::string& name) {
+void MidiMessage::makeInstrumentName(const Content& name) {
     makeMetaMessage(0x04, name);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeLyric -- Create a metaevent lyrics/text message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeLyric(const std::string& text) {
+void MidiMessage::makeLyric(const Content& text) {
     makeMetaMessage(0x05, text);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeMarker -- Create a metaevent marker message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeMarker(const std::string& text) {
+void MidiMessage::makeMarker(const Content& text) {
     makeMetaMessage(0x06, text);
 }
 
-//////////////////////////////
-//
+
 // MidiMessage::makeCue -- Create a metaevent cue-point message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
-//
-
-void MidiMessage::makeCue(const std::string& text) {
+void MidiMessage::makeCue(const Content& text) {
     makeMetaMessage(0x07, text);
 }
 
-}// end namespace imp
+}

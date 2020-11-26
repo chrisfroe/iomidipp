@@ -14,16 +14,14 @@ namespace imp {
 
 class MidiEvent : public MidiMessage {
 public:
-    MidiEvent();
-
+    MidiEvent() = default;
     explicit MidiEvent(int command);
 
     MidiEvent(int command, int param1);
 
     MidiEvent(int command, int param1, int param2);
 
-    MidiEvent(int aTime, int aTrack,
-              std::vector<uchar> &message);
+    MidiEvent(int aTime, int aTrack, std::vector<uchar> &message);
 
     // functions related to event linking (note-ons to note-offs).
     void unlinkEvent();
@@ -32,23 +30,21 @@ public:
 
     void linkEvent(MidiEvent &mev);
 
-    int isLinked() const;
+    bool isLinked() const;
 
-    MidiEvent *getLinkedEvent(void);
+    MidiEvent *getLinkedEvent();
 
-    const MidiEvent *getLinkedEvent(void) const;
+    int getTickDuration();
 
-    int getTickDuration(void) const;
+    double getDurationInSeconds();
 
-    double getDurationInSeconds(void) const;
-
-    int tick{};      // delta or absolute MIDI ticks
-    int track{};     // [original] track number of event in MIDI file
-    double seconds{};// calculated time in sec. (after doTimeAnalysis())
-    int seq{};       // sorting sequence number of event
+    int tick{};  // delta or absolute MIDI ticks
+    int track{};  // [original] track number of event in MIDI file
+    double seconds{};  // calculated time in sec. (after doTimeAnalysis())
+    int seq{};  // sorting sequence number of event
 
 private:
-    MidiEvent *linkedEvent{};// used to match note-ons and note-offs
+    MidiEvent *linkedEvent{}; // used to match note-ons and note-offs
 };
 
 }
