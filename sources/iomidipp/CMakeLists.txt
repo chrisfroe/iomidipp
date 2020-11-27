@@ -9,6 +9,7 @@ set(SOURCES
         )
 
 add_library(iomidipp SHARED ${SOURCES})
+add_library(imp::iomidipp ALIAS iomidipp)
 
 target_include_directories(iomidipp PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
