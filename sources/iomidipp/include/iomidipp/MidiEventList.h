@@ -24,6 +24,6 @@ int markSequence(MidiEventList &list, int sequence = 1);
 
 void sort(MidiEventList& list);
 
-int eventcompare(MidiEvent const &a, MidiEvent const &b);
+int eventCompare(MidiEvent const &a, MidiEvent const &b);
 
 }

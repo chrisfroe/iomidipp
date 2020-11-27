@@ -217,7 +217,10 @@ int markSequence(MidiEventList& list, int sequence) {
 //    and sorting is only allowed in absolute tick state (The MidiEventList
 //    does not know about delta/absolute tick states of its contents).
 void sort(MidiEventList& list) {
-    std::sort(list.begin(), list.end(), eventcompare);
+    auto eventLess = [&](MidiEvent const &a, MidiEvent const &b) -> bool{
+        return eventCompare(a, b) < 0;
+    };
+    std::sort(list.begin(), list.end(), eventLess);
 }
 
 // eventcompare -- Event comparison function for sorting tracks.
@@ -227,7 +230,7 @@ void sort(MidiEventList& list) {
 //    (3) other meta-messages come before regular MIDI messages.
 //    (4) note-offs come after all other regular MIDI messages except note-ons.
 //    (5) note-ons come after all other regular MIDI messages.
-int eventcompare(MidiEvent const &aevent, MidiEvent const &bevent) {
+int eventCompare(MidiEvent const &aevent, MidiEvent const &bevent) {
     if (aevent.tick > bevent.tick) {
         // aevent occurs after bevent
         return +1;
