@@ -35,6 +35,9 @@ jobs:
           mkdir ${REL_INSTALL_PREFIX}
           mkdir ${REL_BUILD_DIR}
           echo "ls: $(ls)"
+          echo "LD_LIBRARY_PATH before ${LD_LIBRARY_PATH}"
+          LD_LIBRARY_PATH=${LD_LIBRARY_PATH};${INSTALL_PREFIX}/lib
+          echo "LD_LIBRARY_PATH after ${LD_LIBRARY_PATH}"
           cd ${BUILD_DIR}
           cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release ${SOURCE_DIR}
           cmake --build .
