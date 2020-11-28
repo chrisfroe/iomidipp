@@ -26,19 +26,18 @@ public:
     double seconds;
 };
 
-
 class MidiData {
 public:
     MidiData() = default;
 
     // track-related functions:
-    std::vector<MidiEventList> &tracks() {
+    std::vector<MidiEventList>& tracks() {
         return _tracks;
     }
 
-    const MidiEventList &operator[](int aTrack) const;
+    const MidiEventList& operator[](int aTrack) const;
 
-    MidiEventList &operator[](int aTrack);
+    MidiEventList& operator[](int aTrack);
 
     std::size_t getNumberOfTracks() const;
 
@@ -136,19 +135,19 @@ public:
     void clearLinks();
 
     // filename functions:
-    void setFilename(const std::string &aname);
+    void setFilename(const std::string& aname);
 
     std::string getFilename() const;
 
     // event functionality:
     MidiEvent addEvent(int aTrack, int aTick,
-                       std::vector<uchar> &midiData);
+                       std::vector<uchar>& midiData);
 
-    MidiEvent addEvent(MidiEvent &mfevent);
+    MidiEvent addEvent(MidiEvent& mfevent);
 
-    MidiEvent addEvent(int aTrack, MidiEvent &mfevent);
+    MidiEvent addEvent(int aTrack, MidiEvent& mfevent);
 
-    MidiEvent &getEvent(int aTrack, int anIndex);
+    MidiEvent& getEvent(int aTrack, int anIndex);
 
     int getNumberOfEvents(int aTrack) const;
 
@@ -157,11 +156,11 @@ public:
     // Meta-event adding convenience functions:
     MidiEvent addMetaEvent(int aTrack, int aTick,
                            int aType,
-                           std::vector<uchar> &metaData);
+                           std::vector<uchar>& metaData);
 
     MidiEvent addMetaEvent(int aTrack, int aTick,
                            int aType,
-                           const std::string &metaData);
+                           const std::string& metaData);
 
 protected:
     // lists of MidiEvents for each MIDI file track.
@@ -196,11 +195,11 @@ protected:
     bool m_linkedEventsQ = false;
 
 private:
-    int makeVLV(uchar *buffer, int number);
+    int makeVLV(uchar* buffer, int number);
 
-    static int ticksearch(const void *A, const void *B);
+    static int ticksearch(const void* A, const void* B);
 
-    static int secondsearch(const void *A, const void *B);
+    static int secondsearch(const void* A, const void* B);
 
     void buildTimeMap();
 
@@ -209,6 +208,6 @@ private:
     double linearSecondInterpolationAtTick(int ticktime);
 };
 
-}
+}// namespace imp
 
-std::ostream &operator<<(std::ostream &out, imp::MidiData &aMidiFile);
+std::ostream& operator<<(std::ostream& out, imp::MidiData& aMidiFile);

@@ -7,8 +7,8 @@
 
 #include <vector>
 
-#include <iomidipp/Utils.h>
 #include <iomidipp/MidiMessage.h>
+#include <iomidipp/Utils.h>
 
 namespace imp {
 
@@ -21,30 +21,30 @@ public:
 
     MidiEvent(int command, int param1, int param2);
 
-    MidiEvent(int aTime, int aTrack, std::vector<uchar> &message);
+    MidiEvent(int aTime, int aTrack, std::vector<uchar>& message);
 
     // functions related to event linking (note-ons to note-offs).
     void unlinkEvent();
 
-    void linkEvent(MidiEvent *mev);
+    void linkEvent(MidiEvent* mev);
 
-    void linkEvent(MidiEvent &mev);
+    void linkEvent(MidiEvent& mev);
 
     bool isLinked() const;
 
-    MidiEvent *getLinkedEvent();
+    MidiEvent* getLinkedEvent();
 
     int getTickDuration();
 
     double getDurationInSeconds();
 
-    int tick{};  // delta or absolute MIDI ticks
-    int track{};  // [original] track number of event in MIDI file
-    double seconds{};  // calculated time in sec. (after doTimeAnalysis())
-    int seq{};  // sorting sequence number of event
+    int tick{};      // delta or absolute MIDI ticks
+    int track{};     // [original] track number of event in MIDI file
+    double seconds{};// calculated time in sec. (after doTimeAnalysis())
+    int seq{};       // sorting sequence number of event
 
 private:
-    MidiEvent *linkedEvent{}; // used to match note-ons and note-offs
+    MidiEvent* linkedEvent{};// used to match note-ons and note-offs
 };
 
-}
+}// namespace imp

@@ -335,7 +335,6 @@ bool MidiMessage::isEmpty() const {
     return content.empty();
 }
 
-
 // MidiMessage::getMetaType -- returns the meta-message type for the
 //     MidiMessage.  If the message is not a meta message, then returns
 //     -1.
@@ -939,7 +938,6 @@ void MidiMessage::setSpelling(int base7, int accidental) {
     setVelocity(vel);
 }
 
-
 // MidiMessage::getSpelling -- Return the diatonic pitch class and accidental
 //    for a note-on's key number.  The MIDI file must be encoded with MIDIPlus
 //    pitch spelling codes for this function to return valid data; otherwise,
@@ -1189,7 +1187,6 @@ void MidiMessage::getSpelling(int& base7, int& accidental) {
     base7 = base7pc + 7 * octave;
 }
 
-
 // MidiMessage::getMetaContent -- Returns the bytes of the meta
 //   message after the length (which is a variable-length-value).
 std::string MidiMessage::getMetaContent() {
@@ -1276,7 +1273,6 @@ void MidiMessage::setMetaContent(std::vector<uchar> const& metaContent) {
     std::copy(metaContent.begin(), metaContent.end(), std::back_inserter(content));
 }
 
-
 // MidiMessage::setMetaTempo -- Input tempo is in quarter notes per minute
 //   (meta message #0x51).
 void MidiMessage::setMetaTempo(double tempo) {
@@ -1284,12 +1280,10 @@ void MidiMessage::setMetaTempo(double tempo) {
     setTempoMicroseconds(microseconds);
 }
 
-
 // MidiMessage::setTempo -- Alias for MidiMessage::setMetaTempo().
 void MidiMessage::setTempo(double tempo) {
     setMetaTempo(tempo);
 }
-
 
 // MidiMessage::setTempoMicroseconds -- Set the tempo in terms
 //   of microseconds per quarter note.
@@ -1302,7 +1296,6 @@ void MidiMessage::setTempoMicroseconds(int microseconds) {
     content[4] = (microseconds >> 8) & 0xff;
     content[5] = (microseconds >> 0) & 0xff;
 }
-
 
 // MidiMessage::makeTimeSignature -- create a time signature meta message
 //      (meta #0x58).  The "bottom" parameter should be a power of two;
@@ -1416,7 +1409,6 @@ void MidiMessage::makeSustainOn(int channel) {
     makeController(channel, 64, 127);
 }
 
-
 // MidiMessage::makeSustainPedalOn -- Alias for MidiMessage::makeSustainOn().
 void MidiMessage::makeSustainPedalOn(int channel) {
     makeSustainOn(channel);
@@ -1443,14 +1435,12 @@ void MidiMessage::makeMetaMessage(int mnum, const Content& data) {
     setMetaContent(data);
 }
 
-
 // MidiMessage::makeText -- Create a metaevent text message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
 void MidiMessage::makeText(const Content& text) {
     makeMetaMessage(0x01, text);
 }
-
 
 // MidiMessage::makeCopyright -- Create a metaevent copyright message.
 //    This is not a real MIDI message, but rather a pretend message for use
@@ -1459,14 +1449,12 @@ void MidiMessage::makeCopyright(const Content& text) {
     makeMetaMessage(0x02, text);
 }
 
-
 // MidiMessage::makeTrackName -- Create a metaevent track name message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
 void MidiMessage::makeTrackName(const Content& name) {
     makeMetaMessage(0x03, name);
 }
-
 
 // MidiMessage::makeTrackName -- Create a metaevent instrument name message.
 //    This is not a real MIDI message, but rather a pretend message for use
@@ -1475,14 +1463,12 @@ void MidiMessage::makeInstrumentName(const Content& name) {
     makeMetaMessage(0x04, name);
 }
 
-
 // MidiMessage::makeLyric -- Create a metaevent lyrics/text message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
 void MidiMessage::makeLyric(const Content& text) {
     makeMetaMessage(0x05, text);
 }
-
 
 // MidiMessage::makeMarker -- Create a metaevent marker message.
 //    This is not a real MIDI message, but rather a pretend message for use
@@ -1491,7 +1477,6 @@ void MidiMessage::makeMarker(const Content& text) {
     makeMetaMessage(0x06, text);
 }
 
-
 // MidiMessage::makeCue -- Create a metaevent cue-point message.
 //    This is not a real MIDI message, but rather a pretend message for use
 //    within Standard MIDI Files.
@@ -1499,4 +1484,4 @@ void MidiMessage::makeCue(const Content& text) {
     makeMetaMessage(0x07, text);
 }
 
-}
+}// namespace imp

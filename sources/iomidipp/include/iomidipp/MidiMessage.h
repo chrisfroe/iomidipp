@@ -45,7 +45,7 @@ public:
 
     void setP3(int value);
 
-    uchar &operator[](int i) {
+    uchar& operator[](int i) {
         return content[i];
     }
 
@@ -64,7 +64,7 @@ public:
 
     void setSpelling(int base7, int accidental);
 
-    void getSpelling(int &base7, int &accidental);
+    void getSpelling(int& base7, int& accidental);
 
     // controller-message convenience functions:
     int getControllerNumber() const;
@@ -97,7 +97,7 @@ public:
 
     void setParameters(int p1);
 
-    void setContent(const std::vector<uchar> &otherContent);
+    void setContent(const std::vector<uchar>& otherContent);
 
     // message-type convenience functions:
     bool isMetaMessage() const;
@@ -163,21 +163,21 @@ public:
     void makeSustainPedalOff(int channel);
 
     // meta-message creation and helper functions:
-    void makeMetaMessage(int mnum, const Content &data);
+    void makeMetaMessage(int mnum, const Content& data);
 
-    void makeText(const Content &name);
+    void makeText(const Content& name);
 
-    void makeCopyright(const Content &text);
+    void makeCopyright(const Content& text);
 
-    void makeTrackName(const Content &name);
+    void makeTrackName(const Content& name);
 
-    void makeInstrumentName(const Content &name);
+    void makeInstrumentName(const Content& name);
 
-    void makeLyric(const Content &text);
+    void makeLyric(const Content& text);
 
-    void makeMarker(const Content &text);
+    void makeMarker(const Content& text);
 
-    void makeCue(const Content &text);
+    void makeCue(const Content& text);
 
     void makeTimeSignature(int top, int bottom,
                            int clocksPerClick = 24,
@@ -221,7 +221,7 @@ public:
 
     std::string getMetaContent();
 
-    void setMetaContent(std::vector<uchar> const &metaContent);
+    void setMetaContent(std::vector<uchar> const& metaContent);
 
     void setTempo(double tempo);
 
@@ -233,4 +233,4 @@ private:
     std::vector<uchar> content = {};
 };
 
-}
+}// namespace imp

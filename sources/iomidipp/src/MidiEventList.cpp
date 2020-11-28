@@ -3,9 +3,9 @@
  * @copyright 2020-2020, Christoph Fröhner under BSD-2 license
  */
 
-#include <vector>
 #include <algorithm>
 #include <utility>
+#include <vector>
 
 #include <iomidipp/MidiEventList.h>
 
@@ -15,7 +15,7 @@ namespace imp {
 //    bytes.  This function first deallocates any empty MIDI events, and then
 //    removes them from the list of events.
 void removeEmpties(MidiEventList& list) {
-    auto _ = std::remove_if(list.begin(), list.end(), [](auto const &event) { return event.isEmpty(); });
+    auto _ = std::remove_if(list.begin(), list.end(), [](auto const& event) { return event.isEmpty(); });
 }
 
 // linkNotePairs -- Match note-ones and note-offs together
@@ -27,12 +27,11 @@ void removeEmpties(MidiEventList& list) {
 //   track is assumed to be in time-sorted order.  Returns the number
 //   of linked notes (note-on/note-off pairs).
 int linkNotePairs(MidiEventList& list) {
-
     // Note-on states:
     // dimension 1: MIDI channel (0-15)
     // dimension 2: MIDI key     (0-127)  (but 0 not used for note-ons)
     // dimension 3: List of active note-ons or note-offs.
-    std::vector<std::vector<std::vector<MidiEvent *>>> noteons;
+    std::vector<std::vector<std::vector<MidiEvent*>>> noteons;
     noteons.resize(16);
     int i;
     for (i = 0; i < (int) noteons.size(); i++) {
@@ -106,7 +105,7 @@ int linkNotePairs(MidiEventList& list) {
     // dimensions:
     // 1: mapped controller (0 to 17)
     // 2: channel (0 to 15)
-    std::vector<std::vector<MidiEvent *>> contevents;
+    std::vector<std::vector<MidiEvent*>> contevents;
     contevents.resize(18);
     std::vector<std::vector<int>> oldstates;
     oldstates.resize(18);
@@ -126,8 +125,8 @@ int linkNotePairs(MidiEventList& list) {
     int conti;
     int contstate;
     int counter = 0;
-    MidiEvent *mev;
-    MidiEvent *noteon;
+    MidiEvent* mev;
+    MidiEvent* noteon;
     for (i = 0; i < list.size(); i++) {
         mev = &list.at(i);
         mev->unlinkEvent();
@@ -179,7 +178,7 @@ int linkNotePairs(MidiEventList& list) {
 
 // clearLinks -- remove all note-on/note-off links.
 void clearLinks(MidiEventList& list) {
-    for (auto &event : list) {
+    for (auto& event : list) {
         event.unlinkEvent();
     }
 }
@@ -189,7 +188,7 @@ void clearLinks(MidiEventList& list) {
 //   sortTracks() to be used, in which case the ordering of MidiEvents
 //   occurring at the same tick may switch their ordering.
 void clearSequence(MidiEventList& list) {
-    for (auto &event : list) {
+    for (auto& event : list) {
         event.seq = 0;
     }
 }
@@ -206,7 +205,7 @@ void clearSequence(MidiEventList& list) {
 //   used.
 //   default value: sequence = 1.
 int markSequence(MidiEventList& list, int sequence) {
-    for (auto &event : list) {
+    for (auto& event : list) {
         event.seq = sequence++;
     }
     return sequence;
@@ -217,7 +216,7 @@ int markSequence(MidiEventList& list, int sequence) {
 //    and sorting is only allowed in absolute tick state (The MidiEventList
 //    does not know about delta/absolute tick states of its contents).
 void sort(MidiEventList& list) {
-    auto eventLess = [&](MidiEvent const &a, MidiEvent const &b) -> bool{
+    auto eventLess = [&](MidiEvent const& a, MidiEvent const& b) -> bool {
         return eventCompare(a, b) < 0;
     };
     std::sort(list.begin(), list.end(), eventLess);
@@ -230,7 +229,7 @@ void sort(MidiEventList& list) {
 //    (3) other meta-messages come before regular MIDI messages.
 //    (4) note-offs come after all other regular MIDI messages except note-ons.
 //    (5) note-ons come after all other regular MIDI messages.
-int eventCompare(MidiEvent const &aevent, MidiEvent const &bevent) {
+int eventCompare(MidiEvent const& aevent, MidiEvent const& bevent) {
     if (aevent.tick > bevent.tick) {
         // aevent occurs after bevent
         return +1;
@@ -296,4 +295,4 @@ int eventCompare(MidiEvent const &aevent, MidiEvent const &bevent) {
     }
 }
 
-}
+}// namespace imp

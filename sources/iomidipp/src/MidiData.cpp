@@ -3,27 +3,26 @@
  * @copyright 2020-2020, Christoph Fröhner under BSD-2 license
  */
 
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <iterator>
-#include <algorithm>
 
 #include <iomidipp/MidiData.h>
 
 namespace imp {
 
 // MidiFile::operator[] -- return the event list for the specified track.
-MidiEventList &MidiData::operator[](int aTrack) {
+MidiEventList& MidiData::operator[](int aTrack) {
     return _tracks[aTrack];
 }
 
-const MidiEventList &MidiData::operator[](int aTrack) const {
+const MidiEventList& MidiData::operator[](int aTrack) const {
     return _tracks[aTrack];
 }
-
 
 std::size_t MidiData::getNumberOfTracks() const {
     return _tracks.size();
@@ -32,8 +31,8 @@ std::size_t MidiData::getNumberOfTracks() const {
 // MidiFile::removeEmpties -- Remove any MIDI message that
 //     contains no bytes.
 void MidiData::removeEmpties() {
-    for (auto &track : _tracks) {
-        auto _ = std::remove_if(track.begin(), track.end(), [](MidiEvent const &event) { return event.isEmpty(); });
+    for (auto& track : _tracks) {
+        auto _ = std::remove_if(track.begin(), track.end(), [](MidiEvent const& event) { return event.isEmpty(); });
     }
 }
 
@@ -49,7 +48,7 @@ void MidiData::removeEmpties() {
 
 void MidiData::markSequence() {
     int sequence = 1;
-    for (auto &track : _tracks) {
+    for (auto& track : _tracks) {
         sequence = imp::markSequence(track, sequence);
     }
 }
@@ -154,7 +153,7 @@ void MidiData::splitTracksByChannel() {
 
     int maxTrack = 0;
     int i;
-    MidiEventList &eventlist = _tracks[0];
+    MidiEventList& eventlist = _tracks[0];
     int length = eventlist.size();
     for (i = 0; i < length; i++) {
         if (eventlist[i].getSize() == 0) {
@@ -168,7 +167,7 @@ void MidiData::splitTracksByChannel() {
             maxTrack = eventlist[i][0] & 0x0f;
         }
     }
-    int m_trackCount = maxTrack + 2; // + 1 for expression track
+    int m_trackCount = maxTrack + 2;// + 1 for expression track
 
     if (m_trackCount <= 1) {
         // only one channel, so don't do anything (leave as Type-0 file).
@@ -246,7 +245,7 @@ void MidiData::makeDeltaTicks() {
     int i, j;
     int temp;
     int length = getNumberOfTracks();
-    int *timedata = new int[length];
+    int* timedata = new int[length];
     for (i = 0; i < length; i++) {
         timedata[i] = 0;
         if (!_tracks[i].empty()) {
@@ -282,7 +281,7 @@ void MidiData::makeAbsoluteTicks() {
     }
     int i, j;
     int length = getNumberOfTracks();
-    int *timedata = new int[length];
+    int* timedata = new int[length];
     for (i = 0; i < length; i++) {
         timedata[i] = 0;
         if (!_tracks[i].empty()) {
@@ -335,7 +334,7 @@ int MidiData::getFileDurationInTicks() {
         makeAbsoluteTicks();
         revertToDelta = true;
     }
-    const MidiData &mf = *this;
+    const MidiData& mf = *this;
     int output = 0;
     for (int i = 0; i < mf.getNumberOfTracks(); i++) {
         if (mf[i].back().tick > output) {
@@ -360,7 +359,7 @@ double MidiData::getFileDurationInSeconds() {
     if (_timemapvalid == 0) {
         buildTimeMap();
         if (_timemapvalid == 0) {
-            return -1.0;    // something went wrong
+            return -1.0;// something went wrong
         }
     }
     bool revertToDelta = false;
@@ -368,7 +367,7 @@ double MidiData::getFileDurationInSeconds() {
         makeAbsoluteTicks();
         revertToDelta = true;
     }
-    const MidiData &mf = *this;
+    const MidiData& mf = *this;
     double output = 0.0;
     for (int i = 0; i < mf.getNumberOfTracks(); i++) {
         if (mf[i].back().seconds > output) {
@@ -390,7 +389,6 @@ void MidiData::doTimeAnalysis() {
     buildTimeMap();
 }
 
-
 // MidiFile::getTimeInSeconds -- return the time in seconds for
 //     the current message.
 
@@ -398,12 +396,11 @@ double MidiData::getTimeInSeconds(int aTrack, int anIndex) {
     return getTimeInSeconds(getEvent(aTrack, anIndex).tick);
 }
 
-
 double MidiData::getTimeInSeconds(int tickvalue) {
     if (_timemapvalid == 0) {
         buildTimeMap();
         if (_timemapvalid == 0) {
-            return -1.0;    // something went wrong
+            return -1.0;// something went wrong
         }
     }
 
@@ -411,7 +408,7 @@ double MidiData::getTimeInSeconds(int tickvalue) {
     key.tick = tickvalue;
     key.seconds = -1;
 
-    void *ptr = bsearch(&key, m_timemap.data(), m_timemap.size(),
+    void* ptr = bsearch(&key, m_timemap.data(), m_timemap.size(),
                         sizeof(TickTime), ticksearch);
 
     if (ptr == nullptr) {
@@ -423,11 +420,9 @@ double MidiData::getTimeInSeconds(int tickvalue) {
         // Since the code is not yet written, kill the program at this point:
         return linearSecondInterpolationAtTick(tickvalue);
     } else {
-        return ((TickTime *) ptr)->seconds;
+        return ((TickTime*) ptr)->seconds;
     }
 }
-
-
 
 //////////////////////////////
 //
@@ -441,7 +436,7 @@ double MidiData::getAbsoluteTickTime(double starttime) {
         buildTimeMap();
         if (_timemapvalid == 0) {
             if (_timemapvalid == 0) {
-                return -1.0;    // something went wrong
+                return -1.0;// something went wrong
             }
         }
     }
@@ -450,7 +445,7 @@ double MidiData::getAbsoluteTickTime(double starttime) {
     key.tick = -1;
     key.seconds = starttime;
 
-    void *ptr = bsearch(&key, m_timemap.data(), m_timemap.size(),
+    void* ptr = bsearch(&key, m_timemap.data(), m_timemap.size(),
                         sizeof(TickTime), secondsearch);
 
     if (ptr == NULL) {
@@ -460,9 +455,8 @@ double MidiData::getAbsoluteTickTime(double starttime) {
         // the time in tick values to figure out the final time in ticks.
         return linearTickInterpolationAtSecond(starttime);
     } else {
-        return ((TickTime *) ptr)->tick;
+        return ((TickTime*) ptr)->tick;
     }
-
 }
 
 // MidiFile::linkNotePairs --  Link note-ons to note-offs separately
@@ -485,7 +479,7 @@ int MidiData::linkEventPairs() {
 
 // MidiFile::setFilename -- sets the filename of the MIDI file.
 //      Currently removed any directory path.
-void MidiData::setFilename(const std::string &aname) {
+void MidiData::setFilename(const std::string& aname) {
     auto loc = aname.rfind('/');
     if (loc != std::string::npos) {
         _readFileName = aname.substr(loc + 1);
@@ -502,7 +496,7 @@ std::string MidiData::getFilename() const {
 
 // MidiFile::addEvent --
 MidiEvent MidiData::addEvent(int aTrack, int aTick,
-                             std::vector<uchar> &midiData) {
+                             std::vector<uchar>& midiData) {
     _timemapvalid = 0;
     MidiEvent me;
     me.tick = aTick;
@@ -513,7 +507,7 @@ MidiEvent MidiData::addEvent(int aTrack, int aTick,
 }
 
 // MidiFile::addEvent -- Some bug here when joinedTracks(), but track==1...
-MidiEvent MidiData::addEvent(MidiEvent &mfevent) {
+MidiEvent MidiData::addEvent(MidiEvent& mfevent) {
     if (getTrackState() == TRACK_STATE_JOINED) {
         _tracks[0].push_back(mfevent);
         return _tracks[0].back();
@@ -524,7 +518,7 @@ MidiEvent MidiData::addEvent(MidiEvent &mfevent) {
 }
 
 // Variant where the track is an input parameter:
-MidiEvent MidiData::addEvent(int aTrack, MidiEvent &mfevent) {
+MidiEvent MidiData::addEvent(int aTrack, MidiEvent& mfevent) {
     if (getTrackState() == TRACK_STATE_JOINED) {
         _tracks[0].push_back(mfevent);
         _tracks[0].back().track = aTrack;
@@ -538,7 +532,7 @@ MidiEvent MidiData::addEvent(int aTrack, MidiEvent &mfevent) {
 
 // MidiFile::addMetaEvent --
 MidiEvent MidiData::addMetaEvent(int aTrack, int aTick, int aType,
-                                 std::vector<uchar> &metaData) {
+                                 std::vector<uchar>& metaData) {
     _timemapvalid = 0;
     int i;
     int length = (int) metaData.size();
@@ -560,7 +554,7 @@ MidiEvent MidiData::addMetaEvent(int aTrack, int aTick, int aType,
 }
 
 MidiEvent MidiData::addMetaEvent(int aTrack, int aTick, int aType,
-                                 const std::string &metaData) {
+                                 const std::string& metaData) {
     int length = (int) metaData.size();
     std::vector<uchar> buffer;
     buffer.resize(length);
@@ -575,8 +569,7 @@ MidiEvent MidiData::addMetaEvent(int aTrack, int aTick, int aType,
 //   size byte(s) for meta-messages.  If the size of the data
 //   in the meta-message is greater than 127, then the size
 //   should (?) be specified as a VLV.
-int MidiData::makeVLV(uchar *buffer, int number) {
-
+int MidiData::makeVLV(uchar* buffer, int number) {
     unsigned long value = (unsigned long) number;
 
     if (value >= (1 << 28)) {
@@ -642,7 +635,7 @@ void MidiData::clear() {
 
 // MidiFile::getEvent -- return the event at the given index in the
 //    specified track.
-MidiEvent &MidiData::getEvent(int aTrack, int anIndex) {
+MidiEvent& MidiData::getEvent(int aTrack, int anIndex) {
     return (_tracks[aTrack])[anIndex];
 }
 
@@ -707,7 +700,7 @@ int MidiData::getTrackCountAsType1() {
                 output = getEvent(0, i).track;
             }
         }
-        return output + 1;  // I think the track values are 0 offset...
+        return output + 1;// I think the track values are 0 offset...
     } else {
         return (int) _tracks.size();
     }
@@ -726,7 +719,7 @@ double MidiData::linearTickInterpolationAtSecond(double seconds) {
     if (_timemapvalid == 0) {
         buildTimeMap();
         if (_timemapvalid == 0) {
-            return -1.0;    // something went wrong
+            return -1.0;// something went wrong
         }
     }
 
@@ -788,7 +781,7 @@ double MidiData::linearSecondInterpolationAtTick(int ticktime) {
     if (_timemapvalid == 0) {
         buildTimeMap();
         if (_timemapvalid == 0) {
-            return -1.0;    // something went wrong
+            return -1.0;// something went wrong
         }
     }
 
@@ -799,7 +792,7 @@ double MidiData::linearSecondInterpolationAtTick(int ticktime) {
         return -1;
     }
     if (ticktime > m_timemap.back().tick) {
-        return -1;  // don't try to extrapolate
+        return -1;// don't try to extrapolate
     }
 
     // Guess which side of the list is closest to target:
@@ -859,7 +852,6 @@ double MidiData::linearSecondInterpolationAtTick(int ticktime) {
 //      is the only mode tested (25 frames per second and 40 subframes
 //      per frame).
 void MidiData::buildTimeMap() {
-
     // convert the MIDI file to absolute time representation
     // in single track mode (and undo if the MIDI file was not
     // in that state when this function was called.
@@ -920,13 +912,12 @@ void MidiData::buildTimeMap() {
     }
 
     _timemapvalid = 1;
-
 }
 
 // MidiFile::ticksearch -- for finding a tick entry in the time map.
-int MidiData::ticksearch(const void *A, const void *B) {
-    TickTime &a = *((TickTime *) A);
-    TickTime &b = *((TickTime *) B);
+int MidiData::ticksearch(const void* A, const void* B) {
+    TickTime& a = *((TickTime*) A);
+    TickTime& b = *((TickTime*) B);
 
     if (a.tick < b.tick) {
         return -1;
@@ -937,9 +928,9 @@ int MidiData::ticksearch(const void *A, const void *B) {
 }
 
 // MidiFile::secondsearch -- for finding a second entry in the time map.
-int MidiData::secondsearch(const void *A, const void *B) {
-    TickTime &a = *((TickTime *) A);
-    TickTime &b = *((TickTime *) B);
+int MidiData::secondsearch(const void* A, const void* B) {
+    TickTime& a = *((TickTime*) A);
+    TickTime& b = *((TickTime*) B);
 
     if (a.seconds < b.seconds) {
         return -1;
@@ -949,6 +940,4 @@ int MidiData::secondsearch(const void *A, const void *B) {
     return 0;
 }
 
-
-
-}
+}// namespace imp

@@ -12,18 +12,18 @@ namespace imp {
 
 using MidiEventList = std::vector<MidiEvent>;
 
-void removeEmpties(MidiEventList &list);
+void removeEmpties(MidiEventList& list);
 
-int linkNotePairs(MidiEventList &list);
+int linkNotePairs(MidiEventList& list);
 
-void clearLinks(MidiEventList &list);
+void clearLinks(MidiEventList& list);
 
-void clearSequence(MidiEventList &list);
+void clearSequence(MidiEventList& list);
 
-int markSequence(MidiEventList &list, int sequence = 1);
+int markSequence(MidiEventList& list, int sequence = 1);
 
 void sort(MidiEventList& list);
 
-int eventCompare(MidiEvent const &a, MidiEvent const &b);
+int eventCompare(MidiEvent const& a, MidiEvent const& b);
 
-}
+}// namespace imp

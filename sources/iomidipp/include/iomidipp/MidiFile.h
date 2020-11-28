@@ -9,13 +9,13 @@
 
 namespace imp::File {
 
-    MidiData read(const std::string &filename);
+MidiData read(const std::string& filename);
 
-    //bool read(std::istream &instream);
+//bool read(std::istream &instream);
 
-    bool write(const std::string &filename, MidiData const& data);
+bool write(const std::string& filename, MidiData const& data);
 
-    //bool write(std::ostream &out);
+//bool write(std::ostream &out);
 
 //    bool writeHex(const std::string &filename,
 //                  int width = 25);
@@ -23,4 +23,4 @@ namespace imp::File {
 //    bool writeHex(std::ostream &out,
 //                  int width = 25);
 
-}
+}// namespace imp::File

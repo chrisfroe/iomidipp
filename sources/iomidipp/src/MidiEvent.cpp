@@ -8,16 +8,18 @@
 namespace imp {
 
 MidiEvent::MidiEvent(int command)
-        : MidiMessage(command) {}
+    : MidiMessage(command) {}
 
 MidiEvent::MidiEvent(int command, int p1)
-        : MidiMessage(command, p1) {}
+    : MidiMessage(command, p1) {}
 
 MidiEvent::MidiEvent(int command, int p1, int p2)
-        : MidiMessage(command, p1, p2) {}
+    : MidiMessage(command, p1, p2) {}
 
-MidiEvent::MidiEvent(int aTime, int aTrack, std::vector<uchar> &message)
-        : MidiMessage(message), track(aTrack), tick(aTime) {}
+MidiEvent::MidiEvent(int aTime, int aTrack, std::vector<uchar>& message)
+    : MidiMessage(message)
+    , track(aTrack)
+    , tick(aTime) {}
 
 // MidiEvent::unlinkEvent -- Disassociate this event with another.
 //   Also tell the other event to disassociate from this event.
@@ -25,14 +27,14 @@ void MidiEvent::unlinkEvent() {
     if (linkedEvent == nullptr) {
         return;
     }
-    MidiEvent *mev = linkedEvent;
+    MidiEvent* mev = linkedEvent;
     linkedEvent = nullptr;
     mev->unlinkEvent();
 }
 
 // MidiEvent::linkEvent -- Make a link between two messages.
 //   Unlinking
-void MidiEvent::linkEvent(MidiEvent *mev) {
+void MidiEvent::linkEvent(MidiEvent* mev) {
     if (mev->linkedEvent != nullptr) {
         // unlink other event if it is linked to something else;
         mev->unlinkEvent();
@@ -47,14 +49,14 @@ void MidiEvent::linkEvent(MidiEvent *mev) {
     linkedEvent = mev;
 }
 
-void MidiEvent::linkEvent(MidiEvent &mev) {
+void MidiEvent::linkEvent(MidiEvent& mev) {
     linkEvent(&mev);
 }
 
 // MidiEvent::getLinkedEvent -- Returns a linked event.  Usually
 //   this is the note-off message for a note-on message and vice-versa.
 //   Returns null if there are no links.
-MidiEvent *MidiEvent::getLinkedEvent() {
+MidiEvent* MidiEvent::getLinkedEvent() {
     return linkedEvent;
 }
 
@@ -70,7 +72,7 @@ bool MidiEvent::isLinked() const {
 //    The tick values are presumed to be in absolute tick mode rather than
 //    delta tick mode.  Returns 0 if not linked.
 int MidiEvent::getTickDuration() {
-    MidiEvent *mev = getLinkedEvent();
+    MidiEvent* mev = getLinkedEvent();
     if (mev == nullptr) {
         return 0;
     }
@@ -87,7 +89,7 @@ int MidiEvent::getTickDuration() {
 //     seconds analysis must be done first; otherwise the duration will be
 //     reported as zero.
 double MidiEvent::getDurationInSeconds() {
-    MidiEvent *mev = getLinkedEvent();
+    MidiEvent* mev = getLinkedEvent();
     if (mev == nullptr) {
         return 0;
     }
@@ -99,4 +101,4 @@ double MidiEvent::getDurationInSeconds() {
     }
 }
 
-}
+}// namespace imp

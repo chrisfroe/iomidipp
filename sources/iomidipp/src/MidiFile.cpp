@@ -11,9 +11,9 @@ namespace imp::File {
 // MidiFile::readLittleEndian4Bytes -- Read four bytes which are in
 //      little-endian order (smallest byte is first).  Then flip
 //      the order of the bytes to create the return value.
-ulong readLittleEndian4Bytes(std::istream &input) {
+ulong readLittleEndian4Bytes(std::istream& input) {
     uchar buffer[4] = {0};
-    input.read((char *) buffer, 4);
+    input.read((char*) buffer, 4);
     if (input.eof()) {
         std::cerr << "Error: unexpected end of file." << std::endl;
         return 0;
@@ -24,9 +24,9 @@ ulong readLittleEndian4Bytes(std::istream &input) {
 // MidiFile::readLittleEndian2Bytes -- Read two bytes which are in
 //       little-endian order (smallest byte is first).  Then flip
 //       the order of the bytes to create the return value.
-ushort readLittleEndian2Bytes(std::istream &input) {
+ushort readLittleEndian2Bytes(std::istream& input) {
     uchar buffer[2] = {0};
-    input.read((char *) buffer, 2);
+    input.read((char*) buffer, 2);
     if (input.eof()) {
         std::cerr << "Error: unexpected end of file." << std::endl;
         return 0;
@@ -37,9 +37,9 @@ ushort readLittleEndian2Bytes(std::istream &input) {
 // MidiFile::readByte -- Read one byte from input stream.  Set
 //     fail status error if there was a problem (calling function
 //     has to check this status for an error after reading).
-uchar readByte(std::istream &input) {
+uchar readByte(std::istream& input) {
     uchar buffer[1] = {0};
-    input.read((char *) buffer, 1);
+    input.read((char*) buffer, 1);
     if (input.eof()) {
         std::cerr << "Error: unexpected end of file." << std::endl;
         return 0;
@@ -47,7 +47,7 @@ uchar readByte(std::istream &input) {
     return buffer[0];
 }
 
-std::ostream &writeLittleEndianUShort(std::ostream &out, ushort value) {
+std::ostream& writeLittleEndianUShort(std::ostream& out, ushort value) {
     union {
         char bytes[2];
         ushort us;
@@ -58,7 +58,7 @@ std::ostream &writeLittleEndianUShort(std::ostream &out, ushort value) {
     return out;
 }
 
-std::ostream &writeBigEndianUShort(std::ostream &out, ushort value) {
+std::ostream& writeBigEndianUShort(std::ostream& out, ushort value) {
     union {
         char bytes[2];
         ushort us;
@@ -69,7 +69,7 @@ std::ostream &writeBigEndianUShort(std::ostream &out, ushort value) {
     return out;
 }
 
-std::ostream &writeLittleEndianShort(std::ostream &out, short value) {
+std::ostream& writeLittleEndianShort(std::ostream& out, short value) {
     union {
         char bytes[2];
         short s;
@@ -80,7 +80,7 @@ std::ostream &writeLittleEndianShort(std::ostream &out, short value) {
     return out;
 }
 
-std::ostream &writeBigEndianShort(std::ostream &out, short value) {
+std::ostream& writeBigEndianShort(std::ostream& out, short value) {
     union {
         char bytes[2];
         short s;
@@ -91,7 +91,7 @@ std::ostream &writeBigEndianShort(std::ostream &out, short value) {
     return out;
 }
 
-std::ostream &writeLittleEndianULong(std::ostream &out, ulong value) {
+std::ostream& writeLittleEndianULong(std::ostream& out, ulong value) {
     union {
         char bytes[4];
         ulong ul;
@@ -104,8 +104,7 @@ std::ostream &writeLittleEndianULong(std::ostream &out, ulong value) {
     return out;
 }
 
-
-std::ostream &writeBigEndianULong(std::ostream &out, ulong value) {
+std::ostream& writeBigEndianULong(std::ostream& out, ulong value) {
     union {
         char bytes[4];
         long ul;
@@ -118,7 +117,7 @@ std::ostream &writeBigEndianULong(std::ostream &out, ulong value) {
     return out;
 }
 
-std::ostream &writeLittleEndianLong(std::ostream &out, long value) {
+std::ostream& writeLittleEndianLong(std::ostream& out, long value) {
     union {
         char bytes[4];
         long l;
@@ -131,7 +130,7 @@ std::ostream &writeLittleEndianLong(std::ostream &out, long value) {
     return out;
 }
 
-std::ostream &writeBigEndianLong(std::ostream &out, long value) {
+std::ostream& writeBigEndianLong(std::ostream& out, long value) {
     union {
         char bytes[4];
         long l;
@@ -142,10 +141,9 @@ std::ostream &writeBigEndianLong(std::ostream &out, long value) {
     out << data.bytes[1];
     out << data.bytes[0];
     return out;
-
 }
 
-std::ostream &writeBigEndianFloat(std::ostream &out, float value) {
+std::ostream& writeBigEndianFloat(std::ostream& out, float value) {
     union {
         char bytes[4];
         float f;
@@ -158,7 +156,7 @@ std::ostream &writeBigEndianFloat(std::ostream &out, float value) {
     return out;
 }
 
-std::ostream &writeLittleEndianFloat(std::ostream &out, float value) {
+std::ostream& writeLittleEndianFloat(std::ostream& out, float value) {
     union {
         char bytes[4];
         float f;
@@ -171,7 +169,7 @@ std::ostream &writeLittleEndianFloat(std::ostream &out, float value) {
     return out;
 }
 
-std::ostream &writeBigEndianDouble(std::ostream &out, double value) {
+std::ostream& writeBigEndianDouble(std::ostream& out, double value) {
     union {
         char bytes[8];
         double d;
@@ -188,7 +186,7 @@ std::ostream &writeBigEndianDouble(std::ostream &out, double value) {
     return out;
 }
 
-std::ostream &writeLittleEndianDouble(std::ostream &out, double value) {
+std::ostream& writeLittleEndianDouble(std::ostream& out, double value) {
     union {
         char bytes[8];
         double d;
@@ -236,7 +234,7 @@ ulong unpackVLV(uchar a = 0, uchar b = 0, uchar c = 0, uchar d = 0, uchar e = 0)
 //   VLV values are not allowed in standard MIDI files, so the extract
 //   delta time would be truncated and the extra byte(s) will be parsed
 //   incorrectly as a MIDI command.
-ulong readVLValue(std::istream &input) {
+ulong readVLValue(std::istream& input) {
     uchar b[5] = {0};
 
     for (int i = 0; i < 5; i++) {
@@ -251,9 +249,8 @@ ulong readVLValue(std::istream &input) {
 
 // MidiFile::extractMidiData -- Extract MIDI data from input
 //    stream.  Return value is 0 if failure; otherwise, returns 1.
-int extractMidiData(std::istream &input, std::vector<uchar> &array,
-                              uchar &runningCommand) {
-
+int extractMidiData(std::istream& input, std::vector<uchar>& array,
+                    uchar& runningCommand) {
     int character;
     uchar byte;
     array.clear();
@@ -290,11 +287,11 @@ int extractMidiData(std::istream &input, std::vector<uchar> &array,
     }
 
     switch (runningCommand & 0xf0) {
-        case 0x80:        // note off (2 more bytes)
-        case 0x90:        // note on (2 more bytes)
-        case 0xA0:        // aftertouch (2 more bytes)
-        case 0xB0:        // cont. controller (2 more bytes)
-        case 0xE0:        // pitch wheel (2 more bytes)
+        case 0x80:// note off (2 more bytes)
+        case 0x90:// note on (2 more bytes)
+        case 0xA0:// aftertouch (2 more bytes)
+        case 0xB0:// cont. controller (2 more bytes)
+        case 0xE0:// pitch wheel (2 more bytes)
             byte = readByte(input);
             if (byte > 0x7f) {
                 std::cerr << "MIDI data byte too large: " << (int) byte << std::endl;
@@ -310,8 +307,8 @@ int extractMidiData(std::istream &input, std::vector<uchar> &array,
                 array.push_back(byte);
             }
             break;
-        case 0xC0:        // patch change (1 more byte)
-        case 0xD0:        // channel pressure (1 more byte)
+        case 0xC0:// patch change (1 more byte)
+        case 0xD0:// channel pressure (1 more byte)
             if (!runningQ) {
                 byte = readByte(input);
                 if (byte > 0x7f) {
@@ -323,10 +320,10 @@ int extractMidiData(std::istream &input, std::vector<uchar> &array,
             break;
         case 0xF0:
             switch (runningCommand) {
-                case 0xff:                 // meta event
+                case 0xff:// meta event
                 {
                     if (!runningQ) {
-                        byte = readByte(input); // meta type
+                        byte = readByte(input);// meta type
                         array.push_back(byte);
                     }
                     ulong length = 0;
@@ -361,11 +358,10 @@ int extractMidiData(std::istream &input, std::vector<uchar> &array,
                         length = byte1;
                     }
                     for (int j = 0; j < (int) length; j++) {
-                        byte = readByte(input); // meta type
+                        byte = readByte(input);// meta type
                         array.push_back(byte);
                     }
-                }
-                    break;
+                } break;
 
                     // The 0xf0 and 0xf7 meta commands deal with system-exclusive
                     // messages. 0xf0 is used to either start a message or to store
@@ -376,18 +372,17 @@ int extractMidiData(std::istream &input, std::vector<uchar> &array,
                     // outgoing raw MIDI bytes, but is kept in the MidiFile message
                     // to indicate a raw MIDI byte message (typically a partial
                     // system exclusive message).
-                case 0xf7:   // Raw bytes. 0xf7 is not part of the raw
-                    // bytes, but are included to indicate
-                    // that this is a raw byte message.
-                case 0xf0:   // System Exclusive message
+                case 0xf7:// Raw bytes. 0xf7 is not part of the raw
+                        // bytes, but are included to indicate
+                        // that this is a raw byte message.
+                case 0xf0:// System Exclusive message
                 {         // (complete, or start of message).
                     int length = (int) readVLValue(input);
                     for (int i = 0; i < length; i++) {
                         byte = readByte(input);
                         array.push_back(byte);
                     }
-                }
-                    break;
+                } break;
 
                     // other "F" MIDI commands are not expected, but can be
                     // handled here if they exist.
@@ -401,8 +396,7 @@ int extractMidiData(std::istream &input, std::vector<uchar> &array,
     return 1;
 }
 
-MidiData read(std::istream &input) {
-
+MidiData read(std::istream& input) {
     if (input.peek() != 'M') {
         throw std::runtime_error("Bad MIDI data input");
     }
@@ -411,7 +405,6 @@ MidiData read(std::istream &input) {
     // uchar  buffer[123456] = {0};
     ulong longdata;
     ushort shortdata;
-
 
     // Read the MIDI header (4 bytes of ID, 4 byte data size,
     // anticipated 6 bytes of data.
@@ -519,7 +512,7 @@ MidiData read(std::istream &input) {
                 break;
             case 29:
                 framespersecond = 29;
-                break;  // really 29.97 for color television
+                break;// really 29.97 for color television
             case 30:
                 framespersecond = 30;
                 break;
@@ -654,9 +647,7 @@ MidiData read(std::istream &input) {
                 event.track = i;
                 data.tracks()[i].push_back(event);
             }
-
         }
-
     }
 
     data.setTimeState(TIME_STATE_ABSOLUTE);
@@ -666,7 +657,7 @@ MidiData read(std::istream &input) {
 
 // MidiFile::read -- Parse a Standard MIDI File and store its contents
 //      in the object.
-MidiData read(const std::string &filename) {
+MidiData read(const std::string& filename) {
     std::fstream input;
     input.open(filename.c_str(), std::ios::binary | std::ios::in);
 
@@ -681,7 +672,7 @@ MidiData read(const std::string &filename) {
 //    as a variable length value which segments a file into 7-bit
 //    values and adds a contination bit to each.  Maximum size of input
 //    aValue is 0x0FFFffff.
-void writeVLValue(long aValue, std::vector<uchar> &outdata) {
+void writeVLValue(long aValue, std::vector<uchar>& outdata) {
     uchar bytes[4] = {0};
 
     if ((unsigned long) aValue >= (1 << 28)) {
@@ -689,10 +680,10 @@ void writeVLValue(long aValue, std::vector<uchar> &outdata) {
         aValue = 0x0FFFffff;
     }
 
-    bytes[0] = (uchar) (((ulong) aValue >> 21) & 0x7f);  // most significant 7 bits
-    bytes[1] = (uchar) (((ulong) aValue >> 14) & 0x7f);
-    bytes[2] = (uchar) (((ulong) aValue >> 7) & 0x7f);
-    bytes[3] = (uchar) (((ulong) aValue) & 0x7f);  // least significant 7 bits
+    bytes[0] = (uchar)(((ulong) aValue >> 21) & 0x7f);// most significant 7 bits
+    bytes[1] = (uchar)(((ulong) aValue >> 14) & 0x7f);
+    bytes[2] = (uchar)(((ulong) aValue >> 7) & 0x7f);
+    bytes[3] = (uchar)(((ulong) aValue) & 0x7f);// least significant 7 bits
 
     int start = 0;
     while ((start < 4) && (bytes[start] == 0)) start++;
@@ -705,7 +696,7 @@ void writeVLValue(long aValue, std::vector<uchar> &outdata) {
 }
 
 // ostream version of MidiFile::write().
-bool write(std::ostream &out, MidiData& data) {
+bool write(std::ostream& out, MidiData& data) {
     int oldTimeState = data.getTickState();
     if (oldTimeState == TIME_STATE_ABSOLUTE) {
         data.makeDeltaTicks();
@@ -747,7 +738,7 @@ bool write(std::ostream &out, MidiData& data) {
     int i, j, k;
     int size;
     for (i = 0; i < data.getNumberOfTracks(); i++) {
-        trackdata.reserve(123456);   // make the track data larger than
+        trackdata.reserve(123456);// make the track data larger than
         // expected data input
         trackdata.clear();
         for (j = 0; j < (int) data.tracks()[i].size(); j++) {
@@ -770,7 +761,7 @@ bool write(std::ostream &out, MidiData& data) {
                 // In other words, when creating a 0xf0 or 0xf7 MIDI message,
                 // do not insert the VLV byte length yourself, as this code will
                 // do it for you automatically.
-                trackdata.push_back((data.tracks()[i])[j][0]); // 0xf0 or 0xf7;
+                trackdata.push_back((data.tracks()[i])[j][0]);// 0xf0 or 0xf7;
                 writeVLValue(((int) (data.tracks()[i])[j].getSize()) - 1, trackdata);
                 for (k = 1; k < (int) (data.tracks()[i])[j].getSize(); k++) {
                     trackdata.push_back((data.tracks()[i])[j][k]);
@@ -784,8 +775,7 @@ bool write(std::ostream &out, MidiData& data) {
             }
         }
         size = (int) trackdata.size();
-        if ((size < 3) || !((trackdata[size - 3] == 0xff)
-                            && (trackdata[size - 2] == 0x2f))) {
+        if ((size < 3) || !((trackdata[size - 3] == 0xff) && (trackdata[size - 2] == 0x2f))) {
             trackdata.push_back(endoftrack[0]);
             trackdata.push_back(endoftrack[1]);
             trackdata.push_back(endoftrack[2]);
@@ -809,7 +799,7 @@ bool write(std::ostream &out, MidiData& data) {
         writeBigEndianULong(out, longdata);
 
         // B. write the actual data
-        out.write((char *) trackdata.data(), trackdata.size());
+        out.write((char*) trackdata.data(), trackdata.size());
     }
 
     if (oldTimeState == TIME_STATE_ABSOLUTE) {
@@ -821,7 +811,7 @@ bool write(std::ostream &out, MidiData& data) {
 
 // MidiFile::write -- write a standard MIDI file to a file or an output
 //    stream.
-bool write(const std::string &filename, MidiData& data) {
+bool write(const std::string& filename, MidiData& data) {
     std::fstream output(filename.c_str(), std::ios::binary | std::ios::out);
 
     if (!output.is_open()) {
@@ -878,4 +868,4 @@ bool write(const std::string &filename, MidiData& data) {
 //    return true;
 //}
 
-}
+}// namespace imp::File

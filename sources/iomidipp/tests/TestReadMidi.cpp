@@ -9,13 +9,16 @@ TEST_CASE("Read midi file and print output") {
         midiData.linkNotePairs();
 
         std::stringstream ss;
-        
+
         int numberOfTracks = midiData.getNumberOfTracks();
         ss << "TPQ: " << midiData.getTicksPerQuarterNote() << "\n";
-        if (numberOfTracks > 1) ss << "TRACKS: " << numberOfTracks << "\n";
+        if (numberOfTracks > 1)
+            ss << "TRACKS: " << numberOfTracks << "\n";
         for (int track = 0; track < numberOfTracks; track++) {
-            if (numberOfTracks > 1) ss << "\nTrack " << track << "\n";
-            ss << "Tick\tSeconds\tDur\tMessage" << "\n";
+            if (numberOfTracks > 1)
+                ss << "\nTrack " << track << "\n";
+            ss << "Tick\tSeconds\tDur\tMessage"
+               << "\n";
             for (int event = 0; event < midiData[track].size(); event++) {
                 ss << std::dec << midiData[track][event].tick;
                 ss << '\t' << std::dec << midiData[track][event].seconds;
