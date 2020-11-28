@@ -24,7 +24,6 @@ jobs:
       - name: configure, build, install, test
         shell: bash -l {0}
         run: |
-          set -e # exit on error
           echo "pwd: $(pwd)"
           INSTALL_PREFIX="$(pwd)/${REL_INSTALL_PREFIX}"
           BUILD_DIR="$(pwd)/${REL_BUILD_DIR}"
