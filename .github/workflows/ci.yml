@@ -23,7 +23,7 @@ jobs:
         shell: bash -l {0}
         run: |
           echo "pwd: $(pwd)"
-          echo "ls: ${ls}"
+          echo "ls: $(ls)"
           INSTALL_PREFIX="$(pwd)/${REL_INSTALL_PREFIX}"
           BUILD_DIR="$(pwd)/${REL_BUILD_DIR}"
           SOURCE_DIR="$(pwd)/${REL_SOURCE_DIR}"
