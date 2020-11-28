@@ -40,7 +40,7 @@ jobs:
           cmake --build .
           cmake --build . --target install
           cd ${INSTALL_PREFIX}/bin
-          ./iomidipp_tests.exe
+          ./iomidipp_tests
           err_code=$?
           if [ ${err_code} -ne 0 ]; then
               ret_code=${err_code}
