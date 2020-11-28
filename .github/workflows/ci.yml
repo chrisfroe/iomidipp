@@ -22,14 +22,17 @@ jobs:
       - name: configure, build, install, test
         shell: bash -l {0}
         run: |
+          set -e # exit on error
           echo "pwd: $(pwd)"
-          echo "ls: $(ls)"
           INSTALL_PREFIX="$(pwd)/${REL_INSTALL_PREFIX}"
           BUILD_DIR="$(pwd)/${REL_BUILD_DIR}"
           SOURCE_DIR="$(pwd)/${REL_SOURCE_DIR}"
           echo "install prefix: ${INSTALL_PREFIX}"
           echo "build dir: ${BUILD_DIR}"
           echo "source dir: ${SOURCE_DIR}"
+          mkdir ${REL_INSTALL_PREFIX}
+          mkdir ${REL_BUILD_DIR}
+          echo "ls: $(ls)"
           cd ${BUILD_DIR}
           cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" ${SOURCE_DIR}
           cmake --build
