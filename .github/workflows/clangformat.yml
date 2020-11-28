@@ -1,6 +1,9 @@
 name: Run clang-format Linter
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   build:
@@ -21,4 +24,3 @@ jobs:
           message: 'Committing clang-format changes'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
