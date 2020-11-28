@@ -37,9 +37,6 @@ jobs:
           mkdir ${REL_INSTALL_PREFIX}/lib
           mkdir ${REL_BUILD_DIR}
           echo "ls: $(ls)"
-          echo "LD_LIBRARY_PATH before ${LD_LIBRARY_PATH}"
-          LD_LIBRARY_PATH=${LD_LIBRARY_PATH};${INSTALL_PREFIX}/lib
-          echo "LD_LIBRARY_PATH after ${LD_LIBRARY_PATH}"
           cd ${BUILD_DIR}
           cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release ${SOURCE_DIR}
           cmake --build .
@@ -75,8 +72,9 @@ jobs:
 #      - name: Get latest CMake and ninja
 #        uses: lukka/get-cmake@latest
 #      - name: configure, build, install, test
-#        shell: bash -l {0}
+#        shell: powershell
 #        run: |
+#          $env:Path = "SomeRandomPath"
 #          INSTALL_PREFIX="$(pwd)/${REL_INSTALL_PREFIX}"
 #          BUILD_DIR="$(pwd)/${REL_BUILD_DIR}"
 #          SOURCE_DIR="$(pwd)/${REL_SOURCE_DIR}"
