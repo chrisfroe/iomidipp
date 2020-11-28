@@ -58,56 +58,48 @@ jobs:
           REL_BUILD_DIR: ${{ env.rel-build-dir }}
           REL_INSTALL_PREFIX: ${{ env.rel-install-prefix }}
           REL_SOURCE_DIR: ${{ env.rel-source-dir }}
-#  iomidipp_ci_windows:
-#    name: iomidipp_ci (${{ matrix.os }})
-#    runs-on: ${{ matrix.os }}
-#    env:
-#      # relative to repo root
-#      rel-build-dir: build # where targets will be built
-#      rel-install-prefix: install # where built targets and testdata is installed to
-#      rel-source-dir: sources # where the root CMakeLists.txt resides
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        os: ['windows-latest']
-#    steps:
-#      - uses: actions/checkout@v2
-#        with:
-#        submodules: 'true'
-#      - name: Get latest CMake and ninja
-#        uses: lukka/get-cmake@latest
-#      - name: configure, build, install, test
-#        shell: powershell
-#        run: |
-#          $env:Path = "SomeRandomPath"
-#          INSTALL_PREFIX="$(pwd)/${REL_INSTALL_PREFIX}"
-#          BUILD_DIR="$(pwd)/${REL_BUILD_DIR}"
-#          SOURCE_DIR="$(pwd)/${REL_SOURCE_DIR}"
-#          echo "install prefix: ${INSTALL_PREFIX}"
-#          echo "build dir: ${BUILD_DIR}"
-#          echo "source dir: ${SOURCE_DIR}"
-#          mkdir ${REL_INSTALL_PREFIX}
-#          mkdir ${REL_INSTALL_PREFIX}/bin
-#          mkdir ${REL_INSTALL_PREFIX}/lib
-#          mkdir ${REL_BUILD_DIR}
-#          echo "ls: $(ls)"
-#          echo "LD_LIBRARY_PATH before ${LD_LIBRARY_PATH}"
-#          LD_LIBRARY_PATH=${LD_LIBRARY_PATH};${INSTALL_PREFIX}/lib
-#          echo "LD_LIBRARY_PATH after ${LD_LIBRARY_PATH}"
-#          cd ${BUILD_DIR}
-#          cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release ${SOURCE_DIR}
-#          cmake --build .
-#          cmake --build . --target install
-#          cd ${INSTALL_PREFIX}/bin
-#          ./iomidipp_tests
-#          err_code=$?
-#          if [ ${err_code} -ne 0 ]; then
-#              ret_code=${err_code}
-#              echo "tests failed with ${ret_code}"
-#          fi
-#          exit ${ret_code}
-#        env:
-#          REL_BUILD_DIR: ${{ env.rel-build-dir }}
-#          REL_INSTALL_PREFIX: ${{ env.rel-install-prefix }}
-#          REL_SOURCE_DIR: ${{ env.rel-source-dir }}
-#
+  iomidipp_ci_windows:
+    name: iomidipp_ci (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    env:
+      # relative to repo root
+      rel-build-dir: build # where targets will be built
+      rel-install-prefix: install # where built targets and testdata is installed to
+      rel-source-dir: sources # where the root CMakeLists.txt resides
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows-latest']
+    steps:
+      - uses: actions/checkout@v2
+        with:
+        submodules: 'true'
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest
+      - name: configure, build, install, test
+        shell: powershell
+        run: |
+          $env:INSTALL_PREFIX="$(pwd)\$env:REL_INSTALL_PREFIX"
+          $env:BUILD_DIR="$(pwd)\$env:REL_BUILD_DIR"
+          $env:SOURCE_DIR="$(pwd)\$env"REL_SOURCE_DIR"
+          echo "install prefix: $env:INSTALL_PREFIX"
+          echo "build dir: $env:BUILD_DIR"
+          echo "source dir: $env:SOURCE_DIR"
+          mkdir $env:REL_INSTALL_PREFIX
+          mkdir $env:REL_INSTALL_PREFIX/bin
+          mkdir $env:REL_INSTALL_PREFIX/lib
+          mkdir $env:REL_BUILD_DIR
+          cd $env:BUILD_DIR
+          cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="$env:INSTALL_PREFIX" -DCMAKE_BUILD_TYPE=Release $env:SOURCE_DIR
+          cmake --build .
+          cmake --build . --target install
+          cd $env:INSTALL_PREFIX/bin
+          $env:err_code=0
+          ./iomidipp_tests.exe
+          $env:err_code=$?
+          exit $env:err_code
+        env:
+          REL_BUILD_DIR: ${{ env.rel-build-dir }}
+          REL_INSTALL_PREFIX: ${{ env.rel-install-prefix }}
+          REL_SOURCE_DIR: ${{ env.rel-source-dir }}
+
