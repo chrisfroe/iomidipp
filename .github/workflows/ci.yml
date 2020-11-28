@@ -36,8 +36,8 @@ jobs:
           mkdir ${REL_BUILD_DIR}
           echo "ls: $(ls)"
           cd ${BUILD_DIR}
-          cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" ${SOURCE_DIR}
-          cmake --build
+          cmake -DIOMIDIPP_CREATE_TEST_TARGET=BOOL:ON -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -DCMAKE_BUILD_TYPE=Release ${SOURCE_DIR}
+          cmake --build .
           cmake --build . --target install
           cd ${INSTALL_PREFIX}/bin
           ./iomidipp_tests.exe
