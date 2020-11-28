@@ -24,7 +24,7 @@ jobs:
       - name: configure, build, install, test
         shell: bash -l {0}
         run: |
-          ./tools/build_and_test.sh
+          bash ./tools/build_and_test.sh
         env:
           REL_BUILD_DIR: ${{ env.rel-build-dir }}
           REL_INSTALL_PREFIX: ${{ env.rel-install-prefix }}
@@ -50,7 +50,7 @@ jobs:
       - name: configure, build, install, test
         shell: powershell
         run: |
-          ./tools/build_and_test.ps1
+          powershell ./tools/build_and_test.ps1
         env:
           REL_BUILD_DIR: ${{ env.rel-build-dir }}
           REL_INSTALL_PREFIX: ${{ env.rel-install-prefix }}
