@@ -43,9 +43,9 @@ jobs:
           fi
           exit ${ret_code}
         env:
-          REL_BUILD_DIR: ${{ rel-build-dir }}
-          REL_INSTALL_PREFIX: ${{ rel-install-prefix }}
-          REL_SOURCE_DIR: ${{ rel-source-dir }}
+          REL_BUILD_DIR: ${{ env.rel-build-dir }}
+          REL_INSTALL_PREFIX: ${{ env.rel-install-prefix }}
+          REL_SOURCE_DIR: ${{ env.rel-source-dir }}
 #  iomidipp_ci_windows:
 #    name: iomidipp_ci (${{ matrix.os }})
 #    runs-on: ${{ matrix.os }}
