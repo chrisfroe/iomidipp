@@ -17,6 +17,8 @@ jobs:
         os: ['ubuntu-latest', 'macos-latest']
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
       - name: Get latest CMake and ninja
         uses: lukka/get-cmake@latest
       - name: configure, build, install, test
