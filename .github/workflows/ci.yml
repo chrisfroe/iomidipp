@@ -46,10 +46,14 @@ jobs:
           ret_code=0
           ./iomidipp_tests
           err_code=$?
+          echo "err_code ${err_code}"
+          echo "ret_code ${ret_code}"
           if [ ${err_code} -ne 0 ]; then
               ret_code=${err_code}
               echo "tests failed with ${ret_code}"
           fi
+          echo "err_code ${err_code}"
+          echo "ret_code ${ret_code}"
           exit ${ret_code}
         env:
           REL_BUILD_DIR: ${{ env.rel-build-dir }}
