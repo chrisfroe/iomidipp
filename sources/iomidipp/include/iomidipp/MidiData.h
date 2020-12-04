@@ -35,6 +35,10 @@ public:
         return _tracks;
     }
 
+    std::vector<MidiEventList> const& tracks() const {
+        return _tracks;
+    }
+
     const MidiEventList& operator[](int aTrack) const;
 
     MidiEventList& operator[](int aTrack);

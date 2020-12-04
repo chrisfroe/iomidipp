@@ -27,7 +27,7 @@ if("${isSystemDir}" STREQUAL "-1")
 endif("${isSystemDir}" STREQUAL "-1")
 
 if (IOMIDIPP_CREATE_TEST_TARGET)
-    enable_testing()
+    # enable_testing()
     add_subdirectory(external/Catch2)
     # list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external/Catch2/extras")
 endif()

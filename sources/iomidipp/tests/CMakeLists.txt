@@ -1,9 +1,9 @@
 project(iomidipp_tests)
 
-add_executable(iomidipp_tests TestMain.cpp TestReadMidi.cpp)
+add_executable(iomidipp_tests TestMain.cpp TestReadMidi.cpp TestJoinAndSplitTracks.cpp)
 
-target_link_libraries(iomidipp_tests PUBLIC Catch2::Catch2)
-target_link_libraries(iomidipp_tests PUBLIC iomidipp)
+target_link_libraries(iomidipp_tests PRIVATE Catch2::Catch2)
+target_link_libraries(iomidipp_tests PRIVATE iomidipp)
 
 # copy test data to build dir
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/testdata" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")

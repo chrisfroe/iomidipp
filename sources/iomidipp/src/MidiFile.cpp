@@ -658,7 +658,7 @@ MidiData read(std::istream& input) {
 // MidiFile::read -- Parse a Standard MIDI File and store its contents
 //      in the object.
 MidiData read(const std::string& filename) {
-    std::fstream input;
+    std::ifstream input;
     input.open(filename.c_str(), std::ios::binary | std::ios::in);
 
     if (!input.is_open()) {
